@@ -1,0 +1,33 @@
+###############################################################################
+# Ignore
+###############################################################################
+
+# All files and directories starting with . or ~
+.*
+~*
+
+# OS generated files and directories
+ehthumbs.db
+Thumbs.db
+
+# IDE files and directories
+*.sublime-project
+*.sublime-workspace
+
+# NPM files and directories
+/node_modules
+npm-debug.*
+yarn-error.*
+
+# Build files and directories
+build
+
+###############################################################################
+# Track
+###############################################################################
+
+!.*.example
+!.editorconfig
+!.gitattributes
+!.gitignore
+!.gitkeep
