@@ -10,12 +10,9 @@
 ehthumbs.db
 Thumbs.db
 
-# IDE files and directories
-*.sublime-project
-*.sublime-workspace
-
-# NPM files and directories
-/node_modules
+# Package management files and directories
+node_modules
+jspm_packages
 npm-debug.*
 yarn-error.*
 

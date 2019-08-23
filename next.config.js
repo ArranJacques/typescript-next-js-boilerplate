@@ -1,14 +1,18 @@
-const autoprefixer = require('autoprefixer');
+require('dotenv').config();
+const { relative } = require('path');
+const autoPrefixer = require('autoprefixer');
+const hash = require('string-hash');
 const path = require('path');
-const poststylus = require('poststylus');
+const postStylus = require('poststylus');
 const stylus = require('@zeit/next-stylus');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const withPlugins = require('next-compose-plugins');
+const withTM = require('next-transpile-modules');
 
 const nextConfig = {
     distDir: 'build',
-    generateBuildId: async () => {
-        return null;
+    publicRuntimeConfig: {
+        // EXAMPLE_CONFIG: process.env.EXAMPLE_CONFIG
     },
     webpack: (config) => {
 
@@ -19,6 +23,26 @@ const nextConfig = {
             config.resolve.plugins = [new TsconfigPathsPlugin];
         }
 
+        // For inline SVGs.
+        config.module.rules.push({
+            test: /\.svg$/,
+            use: ({ resource }) => ({
+                loader: '@svgr/webpack',
+                options: {
+                    svgoConfig: {
+                        plugins: [
+                            {
+                                cleanupIDs: {
+                                    // TODO: need to fix across when inlining the same svg more than once.
+                                    prefix: `svg-${hash(resource)}`
+                                }
+                            }
+                        ]
+                    }
+                }
+            })
+        });
+
         return config;
     }
 };
@@ -27,13 +51,20 @@ const stylysConfig = {
     stylusLoaderOptions: {
         'include css': true,
         import: [
-            path.resolve('./app/foundation/config')
+            path.resolve('./app/foundation/index')
         ],
         use: [
-            poststylus([autoprefixer()])
+            postStylus([autoPrefixer()])
         ]
     }
 };
 
+// node_module packages that contain TypeScript that we want to compile.
+const compileModules = {
+    transpileModules: []
+};
 
-module.exports = withPlugins([[stylus, stylysConfig]], nextConfig);
+module.exports = withPlugins([
+    [stylus, stylysConfig],
+    [withTM, compileModules]
+], nextConfig);
