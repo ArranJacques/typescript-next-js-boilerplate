@@ -53,7 +53,8 @@ const stylysConfig = {
     stylusLoaderOptions: {
         'include css': true,
         import: [
-            path.resolve('./app/foundation/index')
+            path.resolve('./app/foundation/index'),
+            path.resolve('./app/support/index')
         ],
         use: [
             postStylus([autoPrefixer()])
