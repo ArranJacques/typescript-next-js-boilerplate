@@ -29,11 +29,13 @@ const nextConfig = {
             use: ({ resource }) => ({
                 loader: '@svgr/webpack',
                 options: {
+                    dimensions: false,
+                    svgo: true,
                     svgoConfig: {
                         plugins: [
                             {
                                 cleanupIDs: {
-                                    // TODO: need to fix across when inlining the same svg more than once.
+                                    // TODO: need to fix when inlining the same svg more than once.
                                     prefix: `svg-${hash(resource)}`
                                 }
                             }

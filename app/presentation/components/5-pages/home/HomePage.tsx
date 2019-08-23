@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import BaseLayout from 'presentation/components/4-layouts/base/BaseLayout';
+import Cloud from 'presentation/svgs/cloud.svg';
 
 interface Props {
     hello: string,
@@ -24,7 +25,10 @@ export default class extends Component<Props> {
 
         return (
             <BaseLayout className="pg-home">
-                Hello {hello}!
+                <div className="pg-home__body">
+                    <Cloud />
+                    <span>Hello {hello}!</span>
+                </div>
             </BaseLayout>
         );
     }
