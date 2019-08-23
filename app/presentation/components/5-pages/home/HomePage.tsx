@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './home.styl'
+import BaseLayout from 'presentation/components/4-layouts/base/BaseLayout';
 
 interface Props {
     hello: string,
@@ -8,8 +8,14 @@ interface Props {
 
 export default class extends Component<Props> {
 
+    timer: number | undefined;
+
     public componentDidMount(): void {
-        setInterval(this.props.randomiseHello, 3000);
+        this.timer = window.setInterval(this.props.randomiseHello, 3000);
+    }
+
+    public componentWillUnmount(): void {
+        clearTimeout(this.timer);
     }
 
     public render(): JSX.Element {
@@ -17,9 +23,9 @@ export default class extends Component<Props> {
         const { hello } = this.props;
 
         return (
-            <div className="home">
+            <BaseLayout className="pg-home">
                 Hello {hello}!
-            </div>
+            </BaseLayout>
         );
     }
 }

@@ -1,4 +1,4 @@
-import hello from 'containers/hello-container';
-import Home from 'components/pages/home/Home';
+import hello from 'presentation/containers/hello-container';
+import HomePage from 'presentation/components/5-pages/home/HomePage';
 
-export default hello(Home);
+export default hello(HomePage);

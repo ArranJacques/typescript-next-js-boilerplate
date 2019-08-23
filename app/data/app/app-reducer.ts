@@ -5,9 +5,11 @@ export interface AppState {
     hello: string
 }
 
-const StateFactory = Record<AppState>({
+const initialState: AppState = {
     hello: 'World'
-});
+};
+
+const StateFactory = Record<AppState>(initialState);
 
 class State extends StateFactory implements AppState {
     constructor(config: Partial<AppState>) {
