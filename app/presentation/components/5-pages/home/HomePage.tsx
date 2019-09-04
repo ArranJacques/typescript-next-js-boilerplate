@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import BaseLayout from 'presentation/components/4-layouts/base/BaseLayout';
 import Cloud from 'presentation/svgs/cloud.svg';
 
@@ -7,7 +7,7 @@ interface Props {
     randomiseHello: () => void
 }
 
-export default class extends Component<Props> {
+export default class extends PureComponent<Props> {
 
     timer: number | undefined;
 
