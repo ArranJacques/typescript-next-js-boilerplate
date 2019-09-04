@@ -1,16 +1,18 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import { NextPageContext } from 'next';
-import NextApp from 'next/app';
-import store from 'data/store';
-import withRedux from 'next-redux-wrapper';
 import 'app.styl';
+import React from 'react';
+import { NextPageContext } from 'next';
+import store, { deserialise, serialise } from 'data/store';
+import withRedux from 'next-redux-wrapper';
+import { Provider } from 'react-redux';
+import NextApp from 'next/app';
 
 class App extends NextApp {
 
     static async getInitialProps({ Component, ctx }: { Component: any, ctx: NextPageContext }) {
         return {
-            pageProps: (Component.getInitialProps ? await Component.getInitialProps(ctx) : {})
+            pageProps: Component.getInitialProps
+                ? await Component.getInitialProps(ctx)
+                : {}
         };
     }
 
@@ -26,4 +28,7 @@ class App extends NextApp {
     }
 }
 
-export default withRedux(store)(App);
+export default withRedux(store, {
+    serializeState: state => serialise(state),
+    deserializeState: state => state ? deserialise(state) : state
+})(App);

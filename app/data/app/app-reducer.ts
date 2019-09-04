@@ -5,19 +5,19 @@ export interface AppState {
     hello: string
 }
 
-const initialState: AppState = {
+const defaultValues: AppState = {
     hello: 'World'
 };
 
-const StateFactory = Record<AppState>(initialState);
+const StateFactory = Record<AppState>(defaultValues);
 
-class State extends StateFactory implements AppState {
+export class State extends StateFactory implements AppState {
     constructor(config: Partial<AppState>) {
         super(config);
     }
 }
 
-export default (state: State = new State({}), action: app.Action): AppState => {
+export default (state: State = new State({}), action: app.Action): State => {
 
     switch (action.type) {
         case app.ActionType.SetHello:
