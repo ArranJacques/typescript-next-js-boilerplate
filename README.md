@@ -22,6 +22,7 @@ Most of an application's logic is located in the `app` directory. The applicatio
 - `app/presentation` - **presentation layer**
     - `/components` - presentational components.
     - `/containers` - containers for attaching domain logic and application state to presentational components.
+    - `/svgs` - svg components
 - `app/domain` - **domain layer**: business domain logic.
 - `app/data` - **persistence layer**: reducers and actions for updating application state.
 
