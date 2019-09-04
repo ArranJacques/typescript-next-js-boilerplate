@@ -1,5 +1,4 @@
 require('dotenv').config();
-const { relative } = require('path');
 const autoPrefixer = require('autoprefixer');
 const hash = require('string-hash');
 const path = require('path');
@@ -26,19 +25,24 @@ const nextConfig = {
         // For inline SVGs.
         config.module.rules.push({
             test: /\.svg$/,
-            use: ({ resource }) => ({
+            use: ({ issuer, resource }) => ({
                 loader: '@svgr/webpack',
                 options: {
                     dimensions: false,
                     svgo: true,
                     svgoConfig: {
                         plugins: [
-                            {
-                                cleanupIDs: {
-                                    // TODO: need to fix when inlining the same svg more than once.
-                                    prefix: `svg-${hash(resource)}`
-                                }
-                            }
+                            { cleanupListOfValues: true },
+                            { cleanupNumericValues: true },
+                            { removeDesc: true },
+                            { removeEmptyAttrs: true },
+                            { removeEmptyContainers: true },
+                            { removeEmptyText: true },
+                            { removeRasterImages: true },
+                            { removeTitle: true },
+                            { removeUselessDefs: true },
+                            { removeUnusedNS: true },
+                            { cleanupIDs: { prefix: `${hash(issuer + resource)}` } }
                         ]
                     }
                 }
