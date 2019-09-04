@@ -14,8 +14,7 @@ interface SetHello extends ReduxAction {
 export type Action = SetHello
 
 export function setHello(text: string): ThunkAction<Promise<void>, State, void, Action> {
-    return dispatch => new Promise(resolve => {
-        dispatch({ type: ActionType.SetHello, payload: text });
-        resolve();
-    });
+    return async dispatch => {
+        await dispatch({ type: ActionType.SetHello, payload: text });
+    };
 }
