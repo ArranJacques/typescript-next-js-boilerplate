@@ -1,10 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { NextPageContext } from 'next';
-import NextApp, { Container } from 'next/app';
+import NextApp from 'next/app';
 import store from 'data/store';
 import withRedux from 'next-redux-wrapper';
-import 'app.styl'
+import 'app.styl';
 
 class App extends NextApp {
 
@@ -19,11 +19,9 @@ class App extends NextApp {
         const { Component, pageProps, store } = this.props as any;
 
         return (
-            <Container>
-                <Provider store={store}>
-                    <Component {...pageProps} />
-                </Provider>
-            </Container>
+            <Provider store={store}>
+                <Component {...pageProps} />
+            </Provider>
         );
     }
 }
