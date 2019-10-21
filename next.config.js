@@ -8,11 +8,13 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const withPlugins = require('next-compose-plugins');
 const withTM = require('next-transpile-modules');
 
+const runtimeConfig = {
+    // EXAMPLE_CONFIG: process.env.EXAMPLE_CONFIG
+};
+
 const nextConfig = {
     distDir: 'build',
-    publicRuntimeConfig: {
-        // EXAMPLE_CONFIG: process.env.EXAMPLE_CONFIG
-    },
+    publicRuntimeConfig: runtimeConfig,
     webpack: (config) => {
 
         // Next.js currently ignores "baseUrl" in tsconfig.json. This fixes it.
@@ -53,9 +55,10 @@ const nextConfig = {
     }
 };
 
-const stylysConfig = {
+const stylusConfig = {
     stylusLoaderOptions: {
         'include css': true,
+        define: runtimeConfig,
         import: [
             path.resolve('./app/foundation/index'),
             path.resolve('./app/support/index')
@@ -72,6 +75,6 @@ const compileModules = {
 };
 
 module.exports = withPlugins([
-    [stylus, stylysConfig],
+    [stylus, stylusConfig],
     [withTM, compileModules]
 ], nextConfig);
