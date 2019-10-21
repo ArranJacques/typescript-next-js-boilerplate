@@ -6,7 +6,7 @@ interface Props {
 }
 
 const defaultValues: Props = {
-    hello: 'World'
+    hello: ''
 };
 
 export type AppState = Record<Props>;

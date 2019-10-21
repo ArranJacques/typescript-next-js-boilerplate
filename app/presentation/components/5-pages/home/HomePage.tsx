@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react';
+import { NextJSReduxPageContext } from 'support/types';
+import { setHello } from 'data/app/app-actions';
 import BaseLayout from 'presentation/components/4-layouts/base/BaseLayout';
 import Cloud from 'presentation/svgs/cloud.svg';
 
@@ -10,6 +12,17 @@ interface Props {
 export default class extends PureComponent<Props> {
 
     timer: number | undefined;
+
+    public static async getInitialProps({ store }: NextJSReduxPageContext) {
+
+        const p = (): Promise<string> => new Promise(
+            resolve => setTimeout(() => resolve('World'), 100)
+        );
+
+        store.dispatch(setHello(await p()) as any);
+
+        return {};
+    }
 
     public componentDidMount(): void {
         this.timer = window.setInterval(this.props.randomiseHello, 3000);
