@@ -8,7 +8,7 @@ interface Props {
 
 export default class extends PureComponent<Props> {
 
-    public static getInitialProps({ res, err }: NextJSReduxPageContext) {
+    public static async getInitialProps({ res, err }: NextJSReduxPageContext) {
         const statusCode = res ? res.statusCode : err ? err.statusCode : null;
         return { statusCode };
     }
