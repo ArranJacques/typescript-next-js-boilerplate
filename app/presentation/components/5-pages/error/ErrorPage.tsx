@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import BaseLayout from 'presentation/components/4-layouts/base/BaseLayout';
+import { NextJSReduxPageContext } from 'support/types';
 
 interface Props {
     statusCode: number | null
@@ -7,7 +8,7 @@ interface Props {
 
 export default class extends PureComponent<Props> {
 
-    static getInitialProps({ res, err }: { res: any, err: any }) {
+    public static getInitialProps({ res, err }: NextJSReduxPageContext) {
         const statusCode = res ? res.statusCode : err ? err.statusCode : null;
         return { statusCode };
     }
