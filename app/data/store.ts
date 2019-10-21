@@ -1,4 +1,5 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { fromJS } from 'immutable';
 import app, { State as AppState } from 'data/app/app-reducer';
 import State from 'data/state';
 import thunk, { ThunkMiddleware } from 'redux-thunk';
@@ -7,7 +8,7 @@ const reducers = { app };
 
 function newState(initial: { [key: string]: any }): State {
     return {
-        app: new AppState(initial.app || {})
+        app: new AppState(fromJS(initial.app || {}))
     };
 }
 

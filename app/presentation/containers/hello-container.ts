@@ -13,7 +13,7 @@ interface DispatchProps {
 }
 
 const mapStateToProps = (state: State): StateProps => ({
-    hello: state.app.hello
+    hello: state.app.get('hello')
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, app.Action>): DispatchProps => ({
