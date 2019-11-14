@@ -26,7 +26,7 @@ Most of an application's logic is located in the `app` directory. The applicatio
 - `app/domain` - **domain layer**: business domain logic.
 - `app/data` - **persistence layer**: reducers and actions for updating application state.
 
-As well as these 3 layers there is what can be considered a 4th layer that sits next to the 3 hierarchical layers, and that is `app/support`. This contains support logic, such as helper functions, that can be used by any of the 3 mentioned layers.
+As well as these 3 layers there is what can be considered a 4th layer that sits next to the 3 hierarchical layers, and that is `app/support`. This contains support logic, such as helper functions, that can be used by any of the 3 hierarchical layers.
 
 As well as the above, there is also the `app/foundation` directory, which contains configuration, global definitions and other logic/code that forms the foundation of all of the aforementioned layers.
 
