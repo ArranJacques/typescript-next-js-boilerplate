@@ -4,9 +4,9 @@ const hash = require('string-hash');
 const path = require('path');
 const postStylus = require('poststylus');
 const stylus = require('@zeit/next-stylus');
+const transpileModules = require('next-transpile-modules');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const withPlugins = require('next-compose-plugins');
-const withTM = require('next-transpile-modules');
 
 const runtimeConfig = {
     // EXAMPLE_CONFIG: process.env.EXAMPLE_CONFIG
@@ -70,11 +70,11 @@ const stylusConfig = {
 };
 
 // node_module packages that contain TypeScript that we want to compile.
-const compileModules = {
-    transpileModules: []
-};
+const withTm = transpileModules([
+    //
+]);
 
 module.exports = withPlugins([
     [stylus, stylusConfig],
-    [withTM, compileModules]
+    withTm
 ], nextConfig);
