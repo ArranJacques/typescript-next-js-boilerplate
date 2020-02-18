@@ -60,7 +60,7 @@ const stylusConfig = {
         'include css': true,
         define: runtimeConfig,
         import: [
-            path.resolve('./app/foundation/index'),
+            path.resolve('./app/foundation/global'),
             path.resolve('./app/support/index')
         ],
         use: [
