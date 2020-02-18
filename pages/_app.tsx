@@ -1,19 +1,36 @@
 import 'app.styl';
 import React from 'react';
-import { NextPageContext } from 'next';
-import store, { deserialise, serialise } from 'data/store';
-import withRedux from 'next-redux-wrapper';
+import { PageContextProps } from 'support/page';
 import { Provider } from 'react-redux';
-import NextApp from 'next/app';
+import bootstrap from 'foundation/bootstrap';
+import store, { deserialise, serialise } from 'data/store';
+import NextApp, { AppContext, AppInitialProps } from 'next/app';
+import withRedux from 'next-redux-wrapper';
 
 class App extends NextApp {
 
-    public static async getInitialProps({ Component, ctx }: { Component: any, ctx: NextPageContext }) {
-        return {
-            pageProps: Component.getInitialProps
-                ? await Component.getInitialProps(ctx)
-                : {}
+    constructor(props: any) {
+        super(props);
+        bootstrap({ userAgent: props.pageProps.context.userAgent || null });
+    }
+
+    static async getInitialProps({ Component, ctx }: AppContext): Promise<AppInitialProps> {
+
+        const pageProps = Component.getInitialProps
+            ? await Component.getInitialProps(ctx)
+            : {};
+
+        const context: PageContextProps = {
+            userAgent: ''
         };
+
+        if (ctx.req && ctx.req.headers) {
+            context.userAgent = ctx.req.headers['user-agent'] || '';
+        } else {
+            context.userAgent = navigator.userAgent;
+        }
+
+        return { pageProps: { ...pageProps, context } };
     }
 
     public render(): JSX.Element {

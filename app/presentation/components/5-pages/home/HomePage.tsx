@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
 import { NextJSReduxPageContext } from 'support/types';
+import { PageProps } from 'support/page';
 import { setHello } from 'data/app/app-actions';
 import BaseLayout from 'presentation/components/4-layouts/base/BaseLayout';
 import Cloud from 'presentation/svgs/cloud.svg';
+import { isMobile } from 'support/device-detect';
 
-interface Props {
+interface Props extends PageProps {
     hello: string,
     randomiseHello: () => void
 }
@@ -37,7 +39,7 @@ export default class extends PureComponent<Props> {
         const { hello } = this.props;
 
         return (
-            <BaseLayout className="pg-home">
+            <BaseLayout className={`pg-home${isMobile() ? ' pg-home--mobile' : ''}`}>
                 <div className="pg-home__body">
                     <Cloud />
                     <span>Hello {hello}!</span>
