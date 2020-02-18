@@ -21,13 +21,27 @@ class App extends NextApp {
             : {};
 
         const context: PageContextProps = {
-            userAgent: ''
+            userAgent: '',
+            url: {
+                protocol: '',
+                host: '',
+                path: ''
+            }
         };
 
         if (ctx.req && ctx.req.headers) {
             context.userAgent = ctx.req.headers['user-agent'] || '';
+            const req: any = ctx.req;
+            context.url.protocol = req.protocol;
+            context.url.host = req.get('host');
+            context.url.path = ctx.pathname;
+            context.url.path = context.url.path || '/';
         } else {
             context.userAgent = navigator.userAgent;
+            context.url.protocol = window.location.protocol;
+            context.url.host = window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+            context.url.path = window.location.pathname;
+            context.url.path = context.url.path || '/';
         }
 
         return { pageProps: { ...pageProps, context } };

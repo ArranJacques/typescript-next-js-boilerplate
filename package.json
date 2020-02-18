@@ -1,9 +1,9 @@
 {
   "name": "next-js-boilerplate",
   "scripts": {
-    "dev": "next",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start"
+    "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
     "@svgr/webpack": "^5.1.0",
@@ -15,6 +15,7 @@
     "@zeit/next-stylus": "^1.0.1",
     "autoprefixer": "^9.7.4",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "immutable": "^4.0.0-rc.12",
     "next": "^9.2.1",
     "next-compose-plugins": "^2.2.0",
