@@ -9,7 +9,7 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const withPlugins = require('next-compose-plugins');
 
 const runtimeConfig = {
-    // EXAMPLE_CONFIG: process.env.EXAMPLE_CONFIG
+    EXAMPLE_CONFIG: process.env.EXAMPLE_CONFIG || ''
 };
 
 const nextConfig = {

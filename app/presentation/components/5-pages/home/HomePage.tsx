@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
+import { EXAMPLE_CONFIG } from 'foundation/config/runtime';
+import { isMobile } from 'support/device-detect';
 import { NextJSReduxPageContext } from 'support/types';
 import { PageProps } from 'support/page';
 import { setHello } from 'data/app/app-actions';
 import BaseLayout from 'presentation/components/4-layouts/base/BaseLayout';
 import Cloud from 'presentation/svgs/cloud.svg';
-import { isMobile } from 'support/device-detect';
 
 interface Props extends PageProps {
     hello: string,
@@ -42,7 +43,7 @@ export default class extends PureComponent<Props> {
             <BaseLayout className={`pg-home${isMobile() ? ' pg-home--mobile' : ''}`}>
                 <div className="pg-home__body">
                     <Cloud />
-                    <span>Hello {hello}!</span>
+                    <a href={EXAMPLE_CONFIG}>Hello {hello}!</a>
                 </div>
             </BaseLayout>
         );
