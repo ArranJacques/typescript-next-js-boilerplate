@@ -1,7 +1,8 @@
-import { applyMiddleware, combineReducers, createStore } from 'redux';
-import { fromJS } from 'immutable';
 import app, { State as AppState } from 'data/app/app-reducer';
 import State from 'data/state';
+import { fromJS } from 'immutable';
+import { Context, createWrapper, MakeStore } from 'next-redux-wrapper';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk, { ThunkMiddleware } from 'redux-thunk';
 
 const reducers = { app };
@@ -12,7 +13,7 @@ function newState(initial: { [key: string]: any }): State {
     };
 }
 
-export function serialise(state: State): any {
+function serialise(state: State): any {
     const s: { [key: string]: any } = {};
     const keys: (keyof State)[] = Object.keys(state) as (keyof State)[];
     keys.forEach((key) => {
@@ -21,14 +22,18 @@ export function serialise(state: State): any {
     return s;
 }
 
-export function deserialise(state: { [key: string]: any }): any {
+function deserialise(state: { [key: string]: any }): any {
     return newState(state);
 }
 
-export default function (initialState: State = newState({})) {
-    return createStore(
-        combineReducers<State>(reducers as any),
-        initialState,
-        applyMiddleware(thunk as ThunkMiddleware<State>)
-    );
-}
+const makeStore: MakeStore<State> = ({}: Context) => createStore(
+    combineReducers<State>(reducers as any),
+    {},
+    applyMiddleware(thunk as ThunkMiddleware<State>)
+);
+
+export default createWrapper<State>(makeStore, {
+    debug: false,
+    serializeState: state => serialise(state),
+    deserializeState: state => state ? deserialise(state) : state
+});

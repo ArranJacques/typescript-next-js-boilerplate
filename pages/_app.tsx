@@ -1,14 +1,12 @@
 import 'app.styl';
-import store, { deserialise, serialise } from 'data/store';
+import store from 'data/store';
 import bootstrap from 'foundation/bootstrap';
 import { fromJS, Record } from 'immutable';
-import withRedux from 'next-redux-wrapper';
 import NextApp, { AppContext, AppInitialProps } from 'next/app';
 import React from 'react';
-import { Provider } from 'react-redux';
 import { PageContextProps } from 'support/page';
 
-class App extends NextApp {
+class App extends NextApp<AppInitialProps> {
 
     constructor(props: any) {
 
@@ -72,7 +70,7 @@ class App extends NextApp {
 
     public render(): JSX.Element {
 
-        const { Component, pageProps, store } = this.props as any;
+        const { Component, pageProps } = this.props;
 
         // pageProps are transferred over the network from server to client as a plain
         // objects meaning when we try to use them as Immutable objects client side, on
@@ -85,15 +83,8 @@ class App extends NextApp {
                 : pageProps[k];
         });
 
-        return (
-            <Provider store={store}>
-                <Component {...serialisedPageProps} />
-            </Provider>
-        );
+        return <Component {...serialisedPageProps} />;
     }
 }
 
-export default withRedux(store, {
-    serializeState: state => serialise(state),
-    deserializeState: state => state ? deserialise(state) : state
-})(App);
+export default store.withRedux(App);
