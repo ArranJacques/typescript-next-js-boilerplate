@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import React, { PureComponent } from 'react';
-import { DeviceProps } from 'support/device-detect';
+import { PageProps } from 'support/page';
 
-interface Props extends DeviceProps {
+interface Props extends PageProps {
     className?: string
 }
 

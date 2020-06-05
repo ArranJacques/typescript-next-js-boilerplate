@@ -2,7 +2,7 @@ import { Record } from 'immutable';
 import { DeviceContext } from 'support/device-detect';
 
 export interface PageProps {
-    context: PageContextProps
+    pageContext: PageContextProps
     device: DeviceContext
 }
 

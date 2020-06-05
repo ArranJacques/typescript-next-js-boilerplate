@@ -14,10 +14,10 @@ class App extends NextApp {
 
         super(props);
 
-        const context = props.pageProps.context;
-        const userAgent = typeof context.toJS === 'function'
-            ? context.get('userAgent')
-            : context.userAgent;
+        const pageContext = props.pageProps.pageContext;
+        const userAgent = typeof pageContext.toJS === 'function'
+            ? pageContext.get('userAgent')
+            : pageContext.userAgent;
 
         bootstrap({ userAgent: userAgent || null });
     }
@@ -28,7 +28,7 @@ class App extends NextApp {
             ? await Component.getInitialProps(ctx)
             : {};
 
-        let context: PageContextProps = Record({
+        let pageContext: PageContextProps = Record({
             userAgent: '',
             url: Record({
                 canonical: '',
@@ -47,7 +47,7 @@ class App extends NextApp {
             if (queryIndex !== -1) {
                 path = path.substring(0, queryIndex);
             }
-            context = context
+            pageContext = pageContext
                 .set('userAgent', ctx.req.headers['user-agent'] || '')
                 .setIn(['url', 'protocol'], req.protocol)
                 .setIn(['url', 'host'], req.get('host'))
@@ -57,17 +57,17 @@ class App extends NextApp {
             // If we're client side then use the window object to build the page context.
             const path = window.location.pathname;
             const host = window.location.hostname + (window.location.port ? ':' + window.location.port : '');
-            context = context
+            pageContext = pageContext
                 .setIn(['url', 'protocol'], window.location.protocol)
                 .setIn(['url', 'host'], host)
                 .setIn(['url', 'path'], path || '/');
         }
 
-        const url = context.get('url');
+        const url = pageContext.get('url');
         const canonical = (url.get('protocol') + '://' + url.get('host') + url.get('path')).replace(/\/$/, '');
-        context = context.setIn(['url', 'canonical'], canonical);
+        pageContext = pageContext.setIn(['url', 'canonical'], canonical);
 
-        return { pageProps: { ...pageProps, context } };
+        return { pageProps: { ...pageProps, pageContext } };
     }
 
     public render(): JSX.Element {
