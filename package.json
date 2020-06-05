@@ -18,7 +18,7 @@
     "express": "^4.17.1",
     "frontend-utilities": "github:arranjacques/frontend-utilities",
     "immutable": "^4.0.0-rc.12",
-    "next": "^9.2.1",
+    "next": "^9.3.2",
     "next-compose-plugins": "^2.2.0",
     "next-redux-wrapper": "^4.0.1",
     "next-seo": "^4.5.0",
