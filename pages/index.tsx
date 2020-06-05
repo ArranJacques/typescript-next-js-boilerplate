@@ -1,4 +1,3 @@
-import hello from 'presentation/containers/hello-container';
-import HomePage from 'presentation/components/5-pages/home/HomePage';
+import Page from 'presentation/composed/5-pages/HomePage';
 
-export default hello(HomePage);
+export default Page;

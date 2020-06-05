@@ -1,7 +1,7 @@
+import BaseLayout from 'presentation/composed/4-layouts/BaseLayout';
 import React, { PureComponent } from 'react';
-import { NextJSReduxPageContext } from 'support/types';
 import { PageProps } from 'support/page';
-import BaseLayout from 'presentation/components/4-layouts/base/BaseLayout';
+import { NextJSReduxPageContext } from 'support/types';
 
 interface Props extends PageProps {
     statusCode: number | null

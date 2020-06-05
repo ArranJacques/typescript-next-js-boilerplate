@@ -1,17 +1,25 @@
 import 'app.styl';
-import React from 'react';
-import { PageContextProps } from 'support/page';
-import { Provider } from 'react-redux';
-import bootstrap from 'foundation/bootstrap';
 import store, { deserialise, serialise } from 'data/store';
-import NextApp, { AppContext, AppInitialProps } from 'next/app';
+import bootstrap from 'foundation/bootstrap';
+import { fromJS, Record } from 'immutable';
 import withRedux from 'next-redux-wrapper';
+import NextApp, { AppContext, AppInitialProps } from 'next/app';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { PageContextProps } from 'support/page';
 
 class App extends NextApp {
 
     constructor(props: any) {
+
         super(props);
-        bootstrap({ userAgent: props.pageProps.context.userAgent || null });
+
+        const context = props.pageProps.context;
+        const userAgent = typeof context.toJS === 'function'
+            ? context.get('userAgent')
+            : context.userAgent;
+
+        bootstrap({ userAgent: userAgent || null });
     }
 
     static async getInitialProps({ Component, ctx }: AppContext): Promise<AppInitialProps> {
@@ -20,29 +28,44 @@ class App extends NextApp {
             ? await Component.getInitialProps(ctx)
             : {};
 
-        const context: PageContextProps = {
+        let context: PageContextProps = Record({
             userAgent: '',
-            url: {
+            url: Record({
+                canonical: '',
                 protocol: '',
                 host: '',
                 path: ''
-            }
-        };
+            })()
+        })();
 
         if (ctx.req && ctx.req.headers) {
-            context.userAgent = ctx.req.headers['user-agent'] || '';
+
+            // If we're server side then use the request object to build the page context.
             const req: any = ctx.req;
-            context.url.protocol = req.protocol;
-            context.url.host = req.get('host');
-            context.url.path = ctx.pathname;
-            context.url.path = context.url.path || '/';
+            let path = req.originalUrl;
+            const queryIndex = path.indexOf('?');
+            if (queryIndex !== -1) {
+                path = path.substring(0, queryIndex);
+            }
+            context = context
+                .set('userAgent', ctx.req.headers['user-agent'] || '')
+                .setIn(['url', 'protocol'], req.protocol)
+                .setIn(['url', 'host'], req.get('host'))
+                .setIn(['url', 'path'], path || '/');
         } else {
-            context.userAgent = navigator.userAgent;
-            context.url.protocol = window.location.protocol;
-            context.url.host = window.location.hostname + (window.location.port ? ':' + window.location.port : '');
-            context.url.path = window.location.pathname;
-            context.url.path = context.url.path || '/';
+
+            // If we're client side then use the window object to build the page context.
+            const path = window.location.pathname;
+            const host = window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+            context = context
+                .setIn(['url', 'protocol'], window.location.protocol)
+                .setIn(['url', 'host'], host)
+                .setIn(['url', 'path'], path || '/');
         }
+
+        const url = context.get('url');
+        const canonical = (url.get('protocol') + '://' + url.get('host') + url.get('path')).replace(/\/$/, '');
+        context = context.setIn(['url', 'canonical'], canonical);
 
         return { pageProps: { ...pageProps, context } };
     }
@@ -51,9 +74,20 @@ class App extends NextApp {
 
         const { Component, pageProps, store } = this.props as any;
 
+        // pageProps are transferred over the network from server to client as a plain
+        // objects meaning when we try to use them as Immutable objects client side, on
+        // the first page load, things break. Before rendering the page we should check
+        // if the page props are Immutable objects and if they're not then make them so.
+        const serialisedPageProps: { [key: string]: any } = {};
+        Object.keys(pageProps).forEach(k => {
+            serialisedPageProps[k] = typeof pageProps[k].toJS !== 'function'
+                ? fromJS(pageProps[k])
+                : pageProps[k];
+        });
+
         return (
             <Provider store={store}>
-                <Component {...pageProps} />
+                <Component {...serialisedPageProps} />
             </Provider>
         );
     }

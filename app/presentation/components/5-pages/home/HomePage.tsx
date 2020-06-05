@@ -1,11 +1,12 @@
-import React, { PureComponent } from 'react';
-import { EXAMPLE_CONFIG } from 'foundation/config/runtime';
-import { isMobile } from 'support/device-detect';
-import { NextJSReduxPageContext } from 'support/types';
-import { PageProps } from 'support/page';
 import { setHello } from 'data/app/app-actions';
-import BaseLayout from 'presentation/components/4-layouts/base/BaseLayout';
+import { EXAMPLE_CONFIG } from 'foundation/config/runtime';
+import { bemClassList } from 'frontend-utilities/index';
+import BaseLayout from 'presentation/composed/4-layouts/BaseLayout';
 import Cloud from 'presentation/svgs/cloud.svg';
+import React, { PureComponent } from 'react';
+import { getDeviceModifiers } from 'support/device-detect';
+import { PageProps } from 'support/page';
+import { NextJSReduxPageContext } from 'support/types';
 
 interface Props extends PageProps {
     hello: string,
@@ -37,10 +38,12 @@ export default class extends PureComponent<Props> {
 
     public render(): JSX.Element {
 
-        const { hello } = this.props;
+        const { device, hello } = this.props;
+
+        const cl = bemClassList('pg-home').add(getDeviceModifiers(device));
 
         return (
-            <BaseLayout className={`pg-home${isMobile() ? ' pg-home--mobile' : ''}`}>
+            <BaseLayout className={cl.toString()}>
                 <div className="pg-home__body">
                     <Cloud />
                     <a href={EXAMPLE_CONFIG}>Hello {hello}!</a>

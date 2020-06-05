@@ -1,7 +1,8 @@
-import React, { PureComponent } from 'react';
 import Head from 'next/head';
+import React, { PureComponent } from 'react';
+import { DeviceProps } from 'support/device-detect';
 
-interface Props {
+interface Props extends DeviceProps {
     className?: string
 }
 

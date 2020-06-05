@@ -16,6 +16,7 @@
     "autoprefixer": "^9.7.4",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "frontend-utilities": "github:arranjacques/frontend-utilities",
     "immutable": "^4.0.0-rc.12",
     "next": "^9.2.1",
     "next-compose-plugins": "^2.2.0",
@@ -30,7 +31,8 @@
     "stylus": "^0.54.7",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "typescript": "^3.7.5",
-    "ua-parser-js": "^0.7.21"
+    "ua-parser-js": "^0.7.21",
+    "utility-types": "^3.10.0"
   },
   "browserslist": [
     "last 5 version",

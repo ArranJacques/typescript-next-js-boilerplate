@@ -1,3 +1,3 @@
-import ErrorPage from 'presentation/components/5-pages/error/ErrorPage';
+import Page from 'presentation/composed/5-pages/ErrorPage';
 
-export default ErrorPage;
+export default Page;

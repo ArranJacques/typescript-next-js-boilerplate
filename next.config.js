@@ -71,7 +71,7 @@ const stylusConfig = {
 
 // node_module packages that contain TypeScript that we want to compile.
 const withTm = transpileModules([
-    //
+    'frontend-utilities'
 ]);
 
 module.exports = withPlugins([
