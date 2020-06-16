@@ -38,7 +38,7 @@ export default class extends PureComponent<Props> {
                     description={seo ? seo.get('description') : undefined}
                     openGraph={this.getOpenGraphProperties()}
                 />
-                <div className={`lyt-base${className ? ' ' + className : ''}`}>
+                <div className={`base-layout${className ? ' ' + className : ''}`}>
                     {children}
                 </div>
             </>

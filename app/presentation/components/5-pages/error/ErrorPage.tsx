@@ -27,11 +27,11 @@ export default class extends PureComponent<Props> {
     public render(): JSX.Element {
 
         const { device, pageContext, statusCode } = this.props;
-        const cl = bemClassList('pg-error').add(getDeviceModifiers(device));
+        const cl = bemClassList('error-page').add(getDeviceModifiers(device));
 
         return (
             <BaseLayout className={cl.string()} pageContext={pageContext}>
-                <div className="pg-error__body">
+                <div className="error-page__body">
                     <h1>{statusCode ? statusCode : 'Unknown'}</h1>
                     <h2>{statusCode === 404 ? 'Page not found' : 'An error occurred'}</h2>
                 </div>

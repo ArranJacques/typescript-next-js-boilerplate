@@ -40,11 +40,11 @@ export default class extends PureComponent<Props> {
 
         const { device, hello, pageContext } = this.props;
 
-        const cl = bemClassList('pg-home').add(getDeviceModifiers(device));
+        const cl = bemClassList('home-page').add(getDeviceModifiers(device));
 
         return (
             <BaseLayout className={cl.toString()} pageContext={pageContext}>
-                <div className="pg-home__body">
+                <div className="home-page__body">
                     <Cloud />
                     <a href={EXAMPLE_CONFIG}>Hello {hello}!</a>
                 </div>
