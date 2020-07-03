@@ -1,41 +1,37 @@
+import { getDeviceModifiers } from '0-support/device-detect';
+import { NextJSReduxPageContext } from '0-support/types';
+import useDevice from '3-wrapper/contexts/device-detect';
+import BaseLayout from '4-presentation/components/4-layouts/base/BaseLayout';
 import { bemClassList } from 'frontend-utilities';
-import { NextPageContext } from 'next/dist/next-server/lib/utils';
-import BaseLayout from '4-presentation/composed/4-layouts/BaseLayout';
-import React, { PureComponent } from 'react';
-import { DeviceProps, getDeviceModifiers } from '0-support/device-detect';
-import { PageProps } from '0-support/page';
+import { NextPage } from 'next';
+import React from 'react';
 
-interface InitialProps {
+interface Props {
     statusCode: number | null
 }
 
-interface Props extends DeviceProps, InitialProps, PageProps {
-    //
-}
+const Page: NextPage<Props> = ({ statusCode }) => {
 
-export default class extends PureComponent<Props> {
+    const device = useDevice();
+    const cl = bemClassList('error-page').add(getDeviceModifiers(device));
 
-    static async getInitialProps({ res, err }: NextPageContext): Promise<InitialProps> {
+    return (
+        <BaseLayout className={cl.string()}>
+            <div className="error-page__body">
+                <h1>{statusCode ? statusCode : 'Unknown'}</h1>
+                <h2>{statusCode === 404 ? 'Page not found' : 'An error occurred'}</h2>
+            </div>
+        </BaseLayout>
+    );
+};
 
-        const statusCode = !(res && res.statusCode)
-            ? (err && err.statusCode) ? err.statusCode : null
-            : res.statusCode;
+Page.getInitialProps = async ({ res, err }: NextJSReduxPageContext): Promise<Props> => {
 
-        return { statusCode };
-    }
+    const statusCode = !(res && res.statusCode)
+        ? (err && err.statusCode) ? err.statusCode : null
+        : res.statusCode;
 
-    public render(): JSX.Element {
+    return { statusCode };
+};
 
-        const { device, pageContext, statusCode } = this.props;
-        const cl = bemClassList('error-page').add(getDeviceModifiers(device));
-
-        return (
-            <BaseLayout className={cl.string()} pageContext={pageContext}>
-                <div className="error-page__body">
-                    <h1>{statusCode ? statusCode : 'Unknown'}</h1>
-                    <h2>{statusCode === 404 ? 'Page not found' : 'An error occurred'}</h2>
-                </div>
-            </BaseLayout>
-        );
-    }
-}
+export default Page;

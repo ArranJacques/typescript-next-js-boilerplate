@@ -13,12 +13,9 @@ export type DeviceContext = Record<{
     type: DeviceType
 }>
 
-export interface DeviceProps {
-    device: DeviceContext
-}
-
 let UA = new UAParser();
 let device = UA.getResult();
+let context: DeviceContext | null = null;
 
 const DEVICE_TYPES = {
     MOBILE: 'mobile',
@@ -78,22 +75,26 @@ export function isTouch(): boolean {
 }
 
 export function getDeviceType(): DeviceType {
-    return isDesktop() ? 'desktop' : (isTablet() ? 'tablet' : 'mobile');
+    return isMobile() ? 'mobile' : (isTablet() ? 'tablet' : 'desktop');
 }
 
 export function getDeviceContext(): DeviceContext {
 
-    const type = isMobile() ? 'mobile' : (isTablet() ? 'tablet' : 'desktop');
+    if (context) {
+        return context;
+    }
 
-    return Record({
-        isDesktop: type === 'desktop',
+    context = Record({
+        isDesktop: isDesktop(),
         isIE: isIEBrowser(),
         isIEEdge: isEdgeBrowser(),
-        isMobile: type === 'mobile',
-        isTablet: type === 'tablet',
-        isTouch: type === 'mobile' || type === 'tablet',
-        type: type as DeviceType
+        isMobile: isMobile(),
+        isTablet: isTablet(),
+        isTouch: isTouch(),
+        type: getDeviceType()
     })();
+
+    return context;
 }
 
 export function getDeviceModifiers(device: DeviceContext): string[] {
@@ -101,15 +102,17 @@ export function getDeviceModifiers(device: DeviceContext): string[] {
     const modifiers: string[] = [device.get('type')];
 
     if (device.get('isIE')) {
-        modifiers.push('d-ie');
+        modifiers.push('ie');
     }
 
     if (device.get('isIEEdge')) {
-        modifiers.push('d-ie-edge');
+        modifiers.push('ie-edge');
     }
 
     if (device.get('isTouch')) {
-        modifiers.push('d-touch');
+        modifiers.push('touch');
+    } else {
+        modifiers.push('non-touch');
     }
 
     return modifiers;

@@ -1,9 +1,12 @@
+import { getDeviceModifiers } from '0-support/device-detect';
+import useDevice from '3-wrapper/contexts/device-detect';
+import usePage from '3-wrapper/contexts/page-context';
+import { bemClassList } from 'frontend-utilities/index';
 import { Record } from 'immutable';
 import { NextSeo } from 'next-seo';
-import React, { PureComponent } from 'react';
-import { PageProps } from '0-support/page';
+import React, { FC, memo, PropsWithChildren } from 'react';
 
-interface Props extends PageProps {
+interface Props {
     className?: string
     seo?: Record<{
         title?: string
@@ -11,37 +14,31 @@ interface Props extends PageProps {
     }>
 }
 
-export default class extends PureComponent<Props> {
+const Layout: FC<Props> = ({ children, className, seo }) => {
 
-    protected getOpenGraphProperties(): { [key: string]: any } {
+    const device  = useDevice();
+    const page  = usePage();
+    const cl = bemClassList('base-layout').add(getDeviceModifiers(device));
 
-        const { pageContext, seo } = this.props;
+    return (
+        <>
+            <NextSeo
+                title={seo ? seo.get('title') : 'Hello World'}
+                canonical={page.get('url').get('canonical')}
+                description={seo ? seo.get('description') : undefined}
+                openGraph={{
+                    description: seo ? seo.get('description') : undefined,
+                    site_name: 'Hello World',
+                    title: seo ? seo.get('title') : 'Hello World',
+                    type: 'website',
+                    url: page.get('url').get('canonical')
+                }}
+            />
+            <div className={`${cl.toString()}${className ? ' ' + className : ''}`}>
+                {children}
+            </div>
+        </>
+    );
+};
 
-        return {
-            description: seo ? seo.get('description') : undefined,
-            site_name: 'Hello World',
-            title: seo ? seo.get('title') : 'Hello World',
-            type: 'website',
-            url: pageContext.get('url').get('canonical')
-        };
-    }
-
-    public render(): JSX.Element {
-
-        const { children, className, pageContext, seo } = this.props;
-
-        return (
-            <>
-                <NextSeo
-                    title={seo ? seo.get('title') : 'Hello World'}
-                    canonical={pageContext.get('url').get('canonical')}
-                    description={seo ? seo.get('description') : undefined}
-                    openGraph={this.getOpenGraphProperties()}
-                />
-                <div className={`base-layout${className ? ' ' + className : ''}`}>
-                    {children}
-                </div>
-            </>
-        );
-    }
-}
+export default memo<PropsWithChildren<Props>>(Layout);

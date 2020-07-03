@@ -1,54 +1,47 @@
-import { setHello } from '1-data/app/app-actions';
 import { EXAMPLE_CONFIG } from '0-foundation/config/runtime';
-import { bemClassList } from 'frontend-utilities/index';
-import BaseLayout from '4-presentation/composed/4-layouts/BaseLayout';
-import Cloud from '4-presentation/svgs/cloud.svg';
-import React, { PureComponent } from 'react';
 import { getDeviceModifiers } from '0-support/device-detect';
-import { PageProps } from '0-support/page';
 import { NextJSReduxPageContext } from '0-support/types';
+import { setHello } from '1-data/app/app-actions';
+import useDevice from '3-wrapper/contexts/device-detect';
+import BaseLayout from '4-presentation/components/4-layouts/base/BaseLayout';
+import Cloud from '4-presentation/svgs/cloud.svg';
+import { bemClassList } from 'frontend-utilities/index';
+import { NextPage } from 'next';
+import React, { useEffect } from 'react';
 
-interface Props extends PageProps {
+interface Props {
     hello: string,
     randomiseHello: () => void
 }
 
-export default class extends PureComponent<Props> {
+const Page: NextPage<Props> = ({ hello, randomiseHello }) => {
 
-    timer: number | undefined;
+    let timer: number | undefined;
 
-    public static async getInitialProps({ store }: NextJSReduxPageContext) {
+    const device = useDevice();
 
-        const p = (): Promise<string> => new Promise(
-            resolve => setTimeout(() => resolve('World'), 100)
-        );
+    useEffect(() => {
+        timer = window.setInterval(randomiseHello, 3000);
+        return () => clearTimeout(timer);
+    }, []);
 
-        store.dispatch(setHello(await p()) as any);
+    const cl = bemClassList('home-page').add(getDeviceModifiers(device));
 
-        return {};
-    }
+    return (
+        <BaseLayout className={cl.toString()}>
+            <div className="home-page__body">
+                <Cloud />
+                <a href={EXAMPLE_CONFIG}>Hello {hello}!</a>
+            </div>
+        </BaseLayout>
+    );
+};
 
-    public componentDidMount(): void {
-        this.timer = window.setInterval(this.props.randomiseHello, 3000);
-    }
+Page.getInitialProps = async (ctx: NextJSReduxPageContext): Promise<Props> => {
+    ctx.store.dispatch(setHello('World') as any);
+    // Suppress TypeScript errors by pretending we're returning the initial props.
+    return {} as Props;
+};
 
-    public componentWillUnmount(): void {
-        clearTimeout(this.timer);
-    }
+export default Page;
 
-    public render(): JSX.Element {
-
-        const { device, hello, pageContext } = this.props;
-
-        const cl = bemClassList('home-page').add(getDeviceModifiers(device));
-
-        return (
-            <BaseLayout className={cl.toString()} pageContext={pageContext}>
-                <div className="home-page__body">
-                    <Cloud />
-                    <a href={EXAMPLE_CONFIG}>Hello {hello}!</a>
-                </div>
-            </BaseLayout>
-        );
-    }
-}
