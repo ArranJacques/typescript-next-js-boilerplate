@@ -60,8 +60,8 @@ const stylusConfig = {
         'include css': true,
         define: runtimeConfig,
         import: [
-            path.resolve('./app/foundation/global'),
-            path.resolve('./app/support/index')
+            path.resolve('./app/0-foundation/global'),
+            path.resolve('./app/0-support/index')
         ],
         use: [
             postStylus([autoPrefixer()])

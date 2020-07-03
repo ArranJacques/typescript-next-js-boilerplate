@@ -1,10 +1,10 @@
 import 'app.styl';
-import store from 'data/store';
-import bootstrap from 'foundation/bootstrap';
+import store from '1-data/store';
+import bootstrap from '0-foundation/bootstrap';
 import { fromJS, Record } from 'immutable';
 import NextApp, { AppContext, AppInitialProps } from 'next/app';
 import React from 'react';
-import { PageContextProps } from 'support/page';
+import { PageContextProps } from '0-support/page';
 
 class App extends NextApp<AppInitialProps> {
 
