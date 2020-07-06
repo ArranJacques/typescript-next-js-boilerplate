@@ -1,7 +1,7 @@
 import { getDeviceModifiers } from '0-support/device-detect';
 import { NextJSReduxPageContext } from '0-support/types';
 import useDevice from '3-wrapper/contexts/device-detect';
-import BaseLayout from '4-presentation/components/4-layouts/base/BaseLayout';
+import BaseLayout from '4-presentation/components/4-layouts/BaseLayout';
 import { bemClassList } from 'frontend-utilities';
 import { NextPage } from 'next';
 import React from 'react';

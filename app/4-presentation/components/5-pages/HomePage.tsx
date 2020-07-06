@@ -4,7 +4,7 @@ import { NextJSReduxPageContext } from '0-support/types';
 import { setHello } from '1-data/app/app-actions';
 import { WithHelloProps } from '3-wrapper/containers/with-hello';
 import useDevice from '3-wrapper/contexts/device-detect';
-import BaseLayout from '4-presentation/components/4-layouts/base/BaseLayout';
+import BaseLayout from '4-presentation/components/4-layouts/BaseLayout';
 import Cloud from '4-presentation/svgs/cloud.svg';
 import { bemClassList } from 'frontend-utilities/index';
 import { NextPage } from 'next';
