@@ -1,15 +1,19 @@
 import * as app from '1-data/app/app-actions';
-import { connect } from 'react-redux';
-import { randomHello } from '2-domain/random-hello';
-import { ThunkDispatch } from 'redux-thunk';
 import State from '1-data/state';
+import { randomHello } from '2-domain/random-hello';
+import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
 
 interface StateProps {
     hello: string
 }
 
 interface DispatchProps {
-    randomiseHello: () => void
+    randomiseHello: () => Promise<string>
+}
+
+export interface WithHelloProps extends StateProps, DispatchProps {
+    //
 }
 
 const mapStateToProps = (state: State): StateProps => ({
@@ -17,8 +21,10 @@ const mapStateToProps = (state: State): StateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, app.Action>): DispatchProps => ({
-    randomiseHello: () => {
-        dispatch(app.setHello(randomHello()));
+    randomiseHello: async () => {
+        const hello = randomHello();
+        await dispatch(app.setHello(hello));
+        return hello;
     }
 });
 
