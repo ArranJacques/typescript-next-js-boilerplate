@@ -5,27 +5,27 @@ import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 
 interface StateProps {
-    hello: string
+  hello: string
 }
 
 interface DispatchProps {
-    randomiseHello: () => Promise<string>
+  randomiseHello: () => Promise<string>
 }
 
 export interface WithHelloProps extends StateProps, DispatchProps {
-    //
+  //
 }
 
 const mapStateToProps = (state: State): StateProps => ({
-    hello: state.app.get('hello')
+  hello: state.app.get('hello')
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, app.Action>): DispatchProps => ({
-    randomiseHello: async () => {
-        const hello = randomHello();
-        await dispatch(app.setHello(hello));
-        return hello;
-    }
+  randomiseHello: async () => {
+    const hello = randomHello();
+    await dispatch(app.setHello(hello));
+    return hello;
+  }
 });
 
 export default connect<StateProps, DispatchProps, {}, State>(mapStateToProps, mapDispatchToProps);

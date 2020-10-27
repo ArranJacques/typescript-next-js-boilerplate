@@ -4,13 +4,13 @@ import React, { createContext, FC, useContext } from 'react';
 const PageContext = createContext<PageContextProps>(emptyPageContext());
 
 export const PageContextProvider: FC<{ pageContext: PageContextProps }> = ({ children, pageContext }) => {
-    return (
-        <PageContext.Provider value={pageContext}>
-            {children}
-        </PageContext.Provider>
-    );
+  return (
+    <PageContext.Provider value={pageContext}>
+      {children}
+    </PageContext.Provider>
+  );
 };
 
 export default function usePage() {
-    return useContext(PageContext);
+  return useContext(PageContext);
 };

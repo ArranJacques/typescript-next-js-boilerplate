@@ -11,36 +11,36 @@ import { NextPage } from 'next';
 import React, { useEffect } from 'react';
 
 interface Props extends WithHelloProps {
-    //
+  //
 }
 
 const Page: NextPage<Props> = ({ hello, randomiseHello }) => {
 
-    let timer: number | undefined;
+  let timer: number | undefined;
 
-    const device = useDevice();
+  const device = useDevice();
 
-    useEffect(() => {
-        timer = window.setInterval(randomiseHello, 3000);
-        return () => clearTimeout(timer);
-    }, []);
+  useEffect(() => {
+    timer = window.setInterval(randomiseHello, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
-    const cl = bemClassList('home-page').add(getDeviceModifiers(device));
+  const cl = bemClassList('home-page').add(getDeviceModifiers(device));
 
-    return (
-        <BaseLayout className={cl.toString()}>
-            <div className="home-page__body">
-                <Cloud />
-                <a href={EXAMPLE_CONFIG}>Hello {hello}!</a>
-            </div>
-        </BaseLayout>
-    );
+  return (
+    <BaseLayout className={cl.toString()}>
+      <div className="home-page__body">
+        <Cloud />
+        <a href={EXAMPLE_CONFIG}>Hello {hello}!</a>
+      </div>
+    </BaseLayout>
+  );
 };
 
 Page.getInitialProps = async (ctx: NextJSReduxPageContext): Promise<Props> => {
-    ctx.store.dispatch(setHello('World') as any);
-    // Suppress TypeScript errors by pretending we're returning the initial props.
-    return {} as Props;
+  ctx.store.dispatch(setHello('World') as any);
+  // Suppress TypeScript errors by pretending we're returning the initial props.
+  return {} as Props;
 };
 
 export default Page;

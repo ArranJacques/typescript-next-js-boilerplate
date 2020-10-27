@@ -7,31 +7,31 @@ import { NextPage } from 'next';
 import React from 'react';
 
 interface Props {
-    statusCode: number | null
+  statusCode: number | null
 }
 
 const Page: NextPage<Props> = ({ statusCode }) => {
 
-    const device = useDevice();
-    const cl = bemClassList('error-page').add(getDeviceModifiers(device));
+  const device = useDevice();
+  const cl = bemClassList('error-page').add(getDeviceModifiers(device));
 
-    return (
-        <BaseLayout className={cl.string()}>
-            <div className="error-page__body">
-                <h1>{statusCode ? statusCode : 'Unknown'}</h1>
-                <h2>{statusCode === 404 ? 'Page not found' : 'An error occurred'}</h2>
-            </div>
-        </BaseLayout>
-    );
+  return (
+    <BaseLayout className={cl.string()}>
+      <div className="error-page__body">
+        <h1>{statusCode ? statusCode : 'Unknown'}</h1>
+        <h2>{statusCode === 404 ? 'Page not found' : 'An error occurred'}</h2>
+      </div>
+    </BaseLayout>
+  );
 };
 
 Page.getInitialProps = async ({ res, err }: NextJSReduxPageContext): Promise<Props> => {
 
-    const statusCode = !(res && res.statusCode)
-        ? (err && err.statusCode) ? err.statusCode : null
-        : res.statusCode;
+  const statusCode = !(res && res.statusCode)
+    ? (err && err.statusCode) ? err.statusCode : null
+    : res.statusCode;
 
-    return { statusCode };
+  return { statusCode };
 };
 
 export default Page;

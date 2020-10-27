@@ -5,9 +5,9 @@ let context: Context<DeviceContext> | null = null;
 
 export default function useDevice() {
 
-    if (!context) {
-        context = createContext<DeviceContext>(getDeviceContext());
-    }
+  if (!context) {
+    context = createContext<DeviceContext>(getDeviceContext());
+  }
 
-    return useContext(context);
+  return useContext(context);
 };
