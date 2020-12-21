@@ -1,17 +1,6 @@
+import { DeviceContext, DeviceType } from '0-support/types';
 import { Record } from 'immutable';
-import { UAParser } from 'ua-parser-js';
-
-export type DeviceType = 'mobile' | 'tablet' | 'desktop';
-
-export type DeviceContext = Record<{
-  isDesktop: boolean
-  isIE: boolean
-  isIEEdge: boolean
-  isMobile: boolean
-  isTablet: boolean
-  isTouch: boolean
-  type: DeviceType
-}>
+import UAParser from 'ua-parser-js';
 
 let UA = new UAParser();
 let device = UA.getResult();
@@ -25,12 +14,14 @@ const DEVICE_TYPES = {
 
 const BROWSER_TYPES = {
   EDGE: 'Edge',
-  IE: 'IE'
+  IE: 'IE',
+  SAFARI: 'Safari'
 };
 
 export function setUa(uaStr: string): void {
   UA = UA.setUA(uaStr);
   device = UA.getResult();
+  context = null;
 }
 
 function isiPadSafari(): boolean {
@@ -70,12 +61,20 @@ export function isEdgeBrowser(): boolean {
   return device.browser.name === BROWSER_TYPES.EDGE;
 }
 
+export function isSafariBrowser(): boolean {
+  return device.browser.name === BROWSER_TYPES.SAFARI;
+}
+
 export function isTouch(): boolean {
   return isMobile() || isTablet();
 }
 
 export function getDeviceType(): DeviceType {
   return isMobile() ? 'mobile' : (isTablet() ? 'tablet' : 'desktop');
+}
+
+export function getDeviceVersion(): string | undefined {
+  return device.browser.version;
 }
 
 export function getDeviceContext(): DeviceContext {
@@ -89,9 +88,11 @@ export function getDeviceContext(): DeviceContext {
     isIE: isIEBrowser(),
     isIEEdge: isEdgeBrowser(),
     isMobile: isMobile(),
+    isSafari: isSafariBrowser(),
     isTablet: isTablet(),
     isTouch: isTouch(),
-    type: getDeviceType()
+    type: getDeviceType(),
+    version: getDeviceVersion()
   })();
 
   return context;
@@ -107,6 +108,10 @@ export function getDeviceModifiers(device: DeviceContext): string[] {
 
   if (device.get('isIEEdge')) {
     modifiers.push('ie-edge');
+  }
+
+  if (device.get('isSafari')) {
+    modifiers.push('safari');
   }
 
   if (device.get('isTouch')) {

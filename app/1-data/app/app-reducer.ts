@@ -14,7 +14,7 @@ const defaultValues: Props = {
 export type AppState = Record<Props>;
 export const State = Record<Props>(defaultValues);
 
-export default (state: AppState = new State(), action: app.Action | AnyAction): AppState => {
+export default function appReducer(state: AppState = new State(), action: app.Action | AnyAction): AppState {
 
   // TypeScript gets a bit confused sometimes if the "payload" property doesn't
   // exist on one or more of the action types we define. By assigning the "action"

@@ -1,7 +1,6 @@
-import bootstrap from '0-foundation/bootstrap';
-import { getPageContext } from '0-support/page';
+import { getDeviceContext, setUa } from '0-support/device-detect';
 import store from '1-data/store';
-import { PageContextProvider } from '3-wrapper/contexts/page-context';
+import { DeviceContextProvider } from '3-wrapper/context/device-context';
 import 'app.styl';
 import { fromJS } from 'immutable';
 import { AppContext, AppProps } from 'next/app';
@@ -25,25 +24,29 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
   });
 
   // Bootstrap the application.
-  bootstrap({ userAgent: immutablePageProps.pageContext.get('userAgent') });
+  const userAgent = immutablePageProps.userAgent;
+  delete immutablePageProps.userAgent;
 
-  const pageContext = immutablePageProps.pageContext;
-  delete immutablePageProps.pageContext;
+  // Set the user agent for device detection.
+  setUa(userAgent);
 
   return (
-    <PageContextProvider pageContext={pageContext}>
+    <DeviceContextProvider device={getDeviceContext()}>
       <Component {...immutablePageProps} />
-    </PageContextProvider>
+    </DeviceContextProvider>
   );
 };
 
-// TODO: Add proper type.
 //@ts-ignore
 App.getInitialProps = async function ({ Component, ctx }: AppContext) {
 
+  const userAgent = (ctx.req && ctx.req.headers)
+    ? ctx.req.headers['user-agent'] || ''
+    : window.navigator.userAgent;
+
   const pageProps: { [key: string]: any } = {
     ...(Component.getInitialProps ? await Component.getInitialProps(ctx) : {}),
-    pageContext: getPageContext(ctx)
+    userAgent
   };
 
   return { pageProps };
